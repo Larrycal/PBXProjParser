@@ -77,13 +77,6 @@ class PBXProjParser {
             groupSection.items.append(item)
         })
         
-        print("buildFileSectionCount:",buildFileSection.items.count)
-        
-        print("fileReferenceCount:",fileRefsSection.items.count)
-        
-        print("groupSectionCount:",groupSection.items.count)
-        
-        print("projectSectionCount:",projectsSection.items.count)
         guard let version: String = value(for: "archiveVersion", in: obj),
               let objVersion: String = value(for: "objectVersion", in: obj),
               let rootObjHash:String = value(for: "rootObject", in: obj),
