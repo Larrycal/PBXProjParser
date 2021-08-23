@@ -3,11 +3,31 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		468FE17926CA795C008FABF0 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468FE17826CA795C008FABF0 /* main.swift */; };
+		468FE18126CA799C008FABF0 /* PBXProjNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468FE18026CA799C008FABF0 /* PBXProjNode.swift */; };
+		468FE18326CA79AC008FABF0 /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468FE18226CA79AC008FABF0 /* Node.swift */; };
+		468FE18726CA79F9008FABF0 /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468FE18626CA79F9008FABF0 /* Section.swift */; };
+		468FE18E26CA8E4C008FABF0 /* PBXBuildFileSectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468FE18D26CA8E4C008FABF0 /* PBXBuildFileSectionItem.swift */; };
+		468FE19026CA8E9A008FABF0 /* PBXFileISAType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468FE18F26CA8E9A008FABF0 /* PBXFileISAType.swift */; };
+		468FE19726CA93E1008FABF0 /* PBXFileReferenceSectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468FE19626CA93E0008FABF0 /* PBXFileReferenceSectionItem.swift */; };
+		468FE19926CA9405008FABF0 /* SectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468FE19826CA9405008FABF0 /* SectionItem.swift */; };
+		468FE19E26CA9641008FABF0 /* PBXGroupSectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468FE19D26CA9641008FABF0 /* PBXGroupSectionItem.swift */; };
+		468FE1A326CA978D008FABF0 /* PBXProjectSectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468FE1A226CA978D008FABF0 /* PBXProjectSectionItem.swift */; };
+		468FE1A626CB6604008FABF0 /* Preprocessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468FE1A526CB6604008FABF0 /* Preprocessor.swift */; };
+		468FE1AA26CBA2AE008FABF0 /* PBXLexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468FE1A926CBA2AE008FABF0 /* PBXLexer.swift */; };
+		468FE1AC26CBA2BB008FABF0 /* PBXToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468FE1AB26CBA2BB008FABF0 /* PBXToken.swift */; };
+		468FE1B026CBA5CD008FABF0 /* LexerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468FE1AF26CBA5CD008FABF0 /* LexerError.swift */; };
+		468FE1B726CBAB26008FABF0 /* CommandLineKit in Frameworks */ = {isa = PBXBuildFile; productRef = 468FE1B626CBAB26008FABF0 /* CommandLineKit */; };
+		468FE1BA26CBAB50008FABF0 /* PBXProjParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468FE1B926CBAB50008FABF0 /* PBXProjParser.swift */; };
+		468FE1BF26CBABD8008FABF0 /* StreamReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468FE1BD26CBABD8008FABF0 /* StreamReader.swift */; };
+		468FE1C026CBABD8008FABF0 /* StreamWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468FE1BE26CBABD8008FABF0 /* StreamWriter.swift */; };
+		468FE1C326CBE3C5008FABF0 /* SyntaxError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468FE1C226CBE3C5008FABF0 /* SyntaxError.swift */; };
+		468FE1C526CBEEA1008FABF0 /* Tool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468FE1C426CBEEA1008FABF0 /* Tool.swift */; };
+		468FE1C826CCFCCC008FABF0 /* PBXCharacter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468FE1C726CCFCCC008FABF0 /* PBXCharacter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +45,25 @@
 /* Begin PBXFileReference section */
 		468FE17526CA795C008FABF0 /* PBXProjParser */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = PBXProjParser; sourceTree = BUILT_PRODUCTS_DIR; };
 		468FE17826CA795C008FABF0 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		468FE18026CA799C008FABF0 /* PBXProjNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBXProjNode.swift; sourceTree = "<group>"; };
+		468FE18226CA79AC008FABF0 /* Node.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
+		468FE18626CA79F9008FABF0 /* Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
+		468FE18D26CA8E4C008FABF0 /* PBXBuildFileSectionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBXBuildFileSectionItem.swift; sourceTree = "<group>"; };
+		468FE18F26CA8E9A008FABF0 /* PBXFileISAType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBXFileISAType.swift; sourceTree = "<group>"; };
+		468FE19626CA93E0008FABF0 /* PBXFileReferenceSectionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBXFileReferenceSectionItem.swift; sourceTree = "<group>"; };
+		468FE19826CA9405008FABF0 /* SectionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionItem.swift; sourceTree = "<group>"; };
+		468FE19D26CA9641008FABF0 /* PBXGroupSectionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBXGroupSectionItem.swift; sourceTree = "<group>"; };
+		468FE1A226CA978D008FABF0 /* PBXProjectSectionItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBXProjectSectionItem.swift; sourceTree = "<group>"; };
+		468FE1A526CB6604008FABF0 /* Preprocessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preprocessor.swift; sourceTree = "<group>"; };
+		468FE1A926CBA2AE008FABF0 /* PBXLexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBXLexer.swift; sourceTree = "<group>"; };
+		468FE1AB26CBA2BB008FABF0 /* PBXToken.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBXToken.swift; sourceTree = "<group>"; };
+		468FE1AF26CBA5CD008FABF0 /* LexerError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LexerError.swift; sourceTree = "<group>"; };
+		468FE1B926CBAB50008FABF0 /* PBXProjParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBXProjParser.swift; sourceTree = "<group>"; };
+		468FE1BD26CBABD8008FABF0 /* StreamReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamReader.swift; sourceTree = "<group>"; };
+		468FE1BE26CBABD8008FABF0 /* StreamWriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StreamWriter.swift; sourceTree = "<group>"; };
+		468FE1C226CBE3C5008FABF0 /* SyntaxError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyntaxError.swift; sourceTree = "<group>"; };
+		468FE1C426CBEEA1008FABF0 /* Tool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tool.swift; sourceTree = "<group>"; };
+		468FE1C726CCFCCC008FABF0 /* PBXCharacter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBXCharacter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				468FE1B726CBAB26008FABF0 /* CommandLineKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,9 +97,148 @@
 		468FE17726CA795C008FABF0 /* PBXProjParser */ = {
 			isa = PBXGroup;
 			children = (
+				468FE1C126CBE3AC008FABF0 /* Error */,
+				468FE1BB26CBABB9008FABF0 /* Utils */,
+				468FE1A826CBA2A0008FABF0 /* Lexer */,
+				468FE1A726CBA273008FABF0 /* Parser */,
+				468FE1A426CB65F5008FABF0 /* Preprocessor */,
+				468FE17F26CA7988008FABF0 /* Model */,
 				468FE17826CA795C008FABF0 /* main.swift */,
+				468FE1B926CBAB50008FABF0 /* PBXProjParser.swift */,
 			);
 			path = PBXProjParser;
+			sourceTree = "<group>";
+		};
+		468FE17F26CA7988008FABF0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				468FE1C626CCFCBB008FABF0 /* Character */,
+				468FE18526CA79EE008FABF0 /* Base */,
+				468FE18426CA79EA008FABF0 /* Section */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		468FE18426CA79EA008FABF0 /* Section */ = {
+			isa = PBXGroup;
+			children = (
+				468FE18626CA79F9008FABF0 /* Section.swift */,
+				468FE19826CA9405008FABF0 /* SectionItem.swift */,
+				468FE1A126CA9785008FABF0 /* PBXProjectSection */,
+				468FE19A26CA961E008FABF0 /* PBXGroupSection */,
+				468FE19326CA934E008FABF0 /* PBXFileReferenceSection */,
+				468FE18C26CA8E3D008FABF0 /* PBXBuildFileSection */,
+			);
+			path = Section;
+			sourceTree = "<group>";
+		};
+		468FE18526CA79EE008FABF0 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				468FE18026CA799C008FABF0 /* PBXProjNode.swift */,
+				468FE18226CA79AC008FABF0 /* Node.swift */,
+				468FE18F26CA8E9A008FABF0 /* PBXFileISAType.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		468FE18C26CA8E3D008FABF0 /* PBXBuildFileSection */ = {
+			isa = PBXGroup;
+			children = (
+				468FE18D26CA8E4C008FABF0 /* PBXBuildFileSectionItem.swift */,
+			);
+			path = PBXBuildFileSection;
+			sourceTree = "<group>";
+		};
+		468FE19326CA934E008FABF0 /* PBXFileReferenceSection */ = {
+			isa = PBXGroup;
+			children = (
+				468FE19626CA93E0008FABF0 /* PBXFileReferenceSectionItem.swift */,
+			);
+			path = PBXFileReferenceSection;
+			sourceTree = "<group>";
+		};
+		468FE19A26CA961E008FABF0 /* PBXGroupSection */ = {
+			isa = PBXGroup;
+			children = (
+				468FE19D26CA9641008FABF0 /* PBXGroupSectionItem.swift */,
+			);
+			path = PBXGroupSection;
+			sourceTree = "<group>";
+		};
+		468FE1A126CA9785008FABF0 /* PBXProjectSection */ = {
+			isa = PBXGroup;
+			children = (
+				468FE1A226CA978D008FABF0 /* PBXProjectSectionItem.swift */,
+			);
+			path = PBXProjectSection;
+			sourceTree = "<group>";
+		};
+		468FE1A426CB65F5008FABF0 /* Preprocessor */ = {
+			isa = PBXGroup;
+			children = (
+				468FE1A526CB6604008FABF0 /* Preprocessor.swift */,
+			);
+			path = Preprocessor;
+			sourceTree = "<group>";
+		};
+		468FE1A726CBA273008FABF0 /* Parser */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Parser;
+			sourceTree = "<group>";
+		};
+		468FE1A826CBA2A0008FABF0 /* Lexer */ = {
+			isa = PBXGroup;
+			children = (
+				468FE1B126CBA618008FABF0 /* Token */,
+				468FE1A926CBA2AE008FABF0 /* PBXLexer.swift */,
+			);
+			path = Lexer;
+			sourceTree = "<group>";
+		};
+		468FE1B126CBA618008FABF0 /* Token */ = {
+			isa = PBXGroup;
+			children = (
+				468FE1AB26CBA2BB008FABF0 /* PBXToken.swift */,
+			);
+			path = Token;
+			sourceTree = "<group>";
+		};
+		468FE1BB26CBABB9008FABF0 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				468FE1BC26CBABC5008FABF0 /* Stream */,
+				468FE1C426CBEEA1008FABF0 /* Tool.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		468FE1BC26CBABC5008FABF0 /* Stream */ = {
+			isa = PBXGroup;
+			children = (
+				468FE1BD26CBABD8008FABF0 /* StreamReader.swift */,
+				468FE1BE26CBABD8008FABF0 /* StreamWriter.swift */,
+			);
+			path = Stream;
+			sourceTree = "<group>";
+		};
+		468FE1C126CBE3AC008FABF0 /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				468FE1AF26CBA5CD008FABF0 /* LexerError.swift */,
+				468FE1C226CBE3C5008FABF0 /* SyntaxError.swift */,
+			);
+			path = Error;
+			sourceTree = "<group>";
+		};
+		468FE1C626CCFCBB008FABF0 /* Character */ = {
+			isa = PBXGroup;
+			children = (
+				468FE1C726CCFCCC008FABF0 /* PBXCharacter.swift */,
+			);
+			path = Character;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -78,6 +257,9 @@
 			dependencies = (
 			);
 			name = PBXProjParser;
+			packageProductDependencies = (
+				468FE1B626CBAB26008FABF0 /* CommandLineKit */,
+			);
 			productName = PBXProjParser;
 			productReference = 468FE17526CA795C008FABF0 /* PBXProjParser */;
 			productType = "com.apple.product-type.tool";
@@ -105,6 +287,9 @@
 				Base,
 			);
 			mainGroup = 468FE16C26CA795C008FABF0;
+			packageReferences = (
+				468FE1B526CBAB25008FABF0 /* XCRemoteSwiftPackageReference "CommandLineKit" */,
+			);
 			productRefGroup = 468FE17626CA795C008FABF0 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -119,7 +304,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				468FE19926CA9405008FABF0 /* SectionItem.swift in Sources */,
+				468FE19726CA93E1008FABF0 /* PBXFileReferenceSectionItem.swift in Sources */,
+				468FE1A326CA978D008FABF0 /* PBXProjectSectionItem.swift in Sources */,
+				468FE19026CA8E9A008FABF0 /* PBXFileISAType.swift in Sources */,
+				468FE18E26CA8E4C008FABF0 /* PBXBuildFileSectionItem.swift in Sources */,
+				468FE18326CA79AC008FABF0 /* Node.swift in Sources */,
+				468FE18726CA79F9008FABF0 /* Section.swift in Sources */,
+				468FE1AA26CBA2AE008FABF0 /* PBXLexer.swift in Sources */,
+				468FE1B026CBA5CD008FABF0 /* LexerError.swift in Sources */,
+				468FE1C526CBEEA1008FABF0 /* Tool.swift in Sources */,
+				468FE1C326CBE3C5008FABF0 /* SyntaxError.swift in Sources */,
 				468FE17926CA795C008FABF0 /* main.swift in Sources */,
+				468FE1C826CCFCCC008FABF0 /* PBXCharacter.swift in Sources */,
+				468FE1C026CBABD8008FABF0 /* StreamWriter.swift in Sources */,
+				468FE1AC26CBA2BB008FABF0 /* PBXToken.swift in Sources */,
+				468FE18126CA799C008FABF0 /* PBXProjNode.swift in Sources */,
+				468FE1BF26CBABD8008FABF0 /* StreamReader.swift in Sources */,
+				468FE19E26CA9641008FABF0 /* PBXGroupSectionItem.swift in Sources */,
+				468FE1BA26CBAB50008FABF0 /* PBXProjParser.swift in Sources */,
+				468FE1A626CB6604008FABF0 /* Preprocessor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,6 +489,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		468FE1B526CBAB25008FABF0 /* XCRemoteSwiftPackageReference "CommandLineKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/IngmarStein/CommandLineKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		468FE1B626CBAB26008FABF0 /* CommandLineKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 468FE1B526CBAB25008FABF0 /* XCRemoteSwiftPackageReference "CommandLineKit" */;
+			productName = CommandLineKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 468FE16D26CA795C008FABF0 /* Project object */;
 }
