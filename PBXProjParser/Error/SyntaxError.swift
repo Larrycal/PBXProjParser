@@ -10,4 +10,5 @@ import Foundation
 enum SyntaxError: Error {
     case unexpected(String)
     case expected(String)
+    case dismiss(String)
 }

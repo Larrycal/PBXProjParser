@@ -10,7 +10,7 @@ import Foundation
 struct PBXGroupSectionItem: SectionItem {
     let isa: PBXFileISAType = .group
     var id: String
-    var children: [PBXFileReferenceSectionItem]
+    var children: [String]
     var path: String?
     var name: String?
     var sourceTree: String

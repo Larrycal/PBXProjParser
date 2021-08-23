@@ -10,28 +10,87 @@ import Foundation
 class PBXProjParser {
     var path: String = ""
     
-    func run() {
+    func run() throws -> PBXProjNode {
         reset()
-        if let content = try? String(contentsOfFile: path) {
-            tokens = PBXLexer(content).allTokens
-            do {
-                let obj = try parse()
-                let objects = obj.members.first(where: { $0.name.name == "objects" && $0.value.subType == .obj }).flatMap({$0 as? PBXObjCharacter})
-                
-                objects?.members.forEach({ member in
-                    if member.value.subType == .obj,let item = member.value as? PBXObjCharacter {
-                        if item.members.contains(where: {$0.name.name == "isa" && ($0.value as? PBXNameCharacter)?.name == "PBXBuildFile"}),
-                           let fileRef = (item.members.filter({$0.name.name == "fileRef"}).first?.value as? PBXNumCharacter)?.num {
-                            
-                            PBXBuildFileSectionItem(id: member.name.name, fileRef: fileRef, settings: <#T##[String : Any]?#>)
-                        }
-                    }
-                })
-                let node = PBXProjNode(archiveVersion: <#T##Int#>, classes: <#T##Any#>, objectVersion: <#T##Int#>, objects: <#T##[Section]#>, rootObject: <#T##Section#>)
-            } catch {
-                print(error)
+        let content = try String(contentsOfFile: path)
+        tokens = PBXLexer(content).allTokens
+        
+        let obj = try parse()
+        let objects = obj["objects"] as? [String: PBXValueType]
+        
+        var buildFile:[String: PBXValueType] = [:]
+        var buildFileSection = Section(type: .buildFile, items: [])
+        
+        var fileRefs:[String: PBXValueType] = [:]
+        var fileRefsSection = Section(type: .fileReference, items: [])
+        var fileRefItemsHash = [String: PBXFileReferenceSectionItem]()
+        
+        var groups:[String: PBXValueType] = [:]
+        var groupSection = Section(type: .group, items: [])
+        
+        var projects:[String: PBXValueType] = [:]
+        var projectsSection = Section(type: .project, items: [])
+        
+        objects?.forEach({
+            if value(for: "isa", in: $0.value) == "PBXBuildFile" { // PBXBuildFile section
+                buildFile[$0.key] = $0.value
+                guard let fileRef:String = value(for: "isa", in: $0.value) else {
+                    return
+                }
+                let settings:[String: PBXValueType]? = value(for: "settings", in: $0.value)
+                let item = PBXBuildFileSectionItem(id: $0.key, fileRef: fileRef, settings: settings)
+                buildFileSection.items.append(item)
+            } else if value(for: "isa", in: $0.value) == "PBXFileReference" { // PBXFileReference section
+                fileRefs[$0.key] = $0.value
+                guard let path: String = value(for: "path", in: $0.value),
+                      let sourceTree: String = value(for: "sourceTree", in: $0.value) else {
+                    return
+                }
+                let includeIndex: String? = value(for: "includeInIndex", in: $0.value)
+                let explicitFileType: String? = value(for: "explicitFileType", in: $0.value)
+                let lastKnownFileType: String? = value(for: "lastKnownFileType", in: $0.value)
+                let fileEncoding: String? = value(for: "fileEncoding", in: $0.value)
+                let name: String? = value(for: "name", in: $0.value)
+                let item = PBXFileReferenceSectionItem(id: $0.key, fileEncoding: fileEncoding?.intValue, lastKnownFileType: lastKnownFileType, name: name, path: path, sourceTree: sourceTree, explicitFileType: explicitFileType, includeInIndex: includeIndex?.intValue)
+                fileRefsSection.items.append(item)
+                fileRefItemsHash[$0.key] = item
+            } else if value(for: "isa", in: $0.value) == "PBXGroup" { // PBXGroup section
+                groups[$0.key] = $0.value
+            } else if value(for: "isa", in: $0.value) == "PBXProject" { // PBXProject section
+                projects[$0.key] = $0.value
+                let item = PBXProjectSectionItem(id: $0.key)
+                projectsSection.items.append(item)
             }
+        })
+        
+        var groupSectionHash:[String:PBXGroupSectionItem] = [:]
+        // 按key排序后处理group，可以确保children中的group已经配置完成
+        try groups.sorted(by: {$0.key < $1.key}).forEach({ key, result in
+            guard let children:[String] = (value(for: "children", in: result) as [PBXValueType]?) as? [String],
+                  let sourceTree: String = value(for: "sourceTree", in: result) else {
+                throw SyntaxError.dismiss("Dismiss value for key: sourceTree or children in object:\(key)")
+            }
+            let path:String? = value(for: "path", in: result)
+            let name:String? = value(for: "name", in: result)
+            let item = PBXGroupSectionItem(id: key, children: children, path: path, name: name, sourceTree: sourceTree)
+            groupSectionHash[key] = item
+            groupSection.items.append(item)
+        })
+        
+        print("buildFileSectionCount:",buildFileSection.items.count)
+        
+        print("fileReferenceCount:",fileRefsSection.items.count)
+        
+        print("groupSectionCount:",groupSection.items.count)
+        
+        print("projectSectionCount:",projectsSection.items.count)
+        guard let version: String = value(for: "archiveVersion", in: obj),
+              let objVersion: String = value(for: "objectVersion", in: obj),
+              let rootObjHash:String = value(for: "rootObject", in: obj),
+              let rootObj = projectsSection.items.first(where: { $0 is PBXProjectSectionItem && $0.id == rootObjHash}) as? PBXProjectSectionItem else {
+            throw SyntaxError.dismiss("Dismiss value for key:\"rootObject\"")
         }
+        return PBXProjNode(archiveVersion: version, objectVersion: objVersion, objects: [buildFileSection,fileRefsSection,groupSection,projectsSection], rootObject: rootObj)
     }
     
     private var currentToken: PBXToken? {
@@ -83,30 +142,30 @@ private extension PBXProjParser {
 
 // MARK: - parse
 private extension PBXProjParser {
-    func parse() throws -> PBXObjCharacter {
+    func parse() throws -> [String : PBXValueType] {
         guard validToken?.type == .leftCurlyBracket else {
             throw SyntaxError.expected("Expected token: \"{\" do not find. But got: \(validToken as Any). Please check sytax")
         }
         consume()
         if validToken?.type == .rightCurlyBracket {
             consume()
-            return PBXObjCharacter(members: [])
+            return [:]
         }
-        let obj = PBXObjCharacter(members: try parseMembers())
+        let obj = try parseMembers()
         guard validToken?.type == .rightCurlyBracket else {
             throw SyntaxError.expected("Expected token: \"}\" do not find. But got: \(validToken as Any). Please check sytax")
         }
         return obj
     }
     
-    func parseObject() throws -> PBXObjCharacter {
+    func parseObject() throws -> [String : PBXValueType] {
         guard validToken?.type == .leftCurlyBracket else {
             throw SyntaxError.expected("Expected token: \"{\" do not find. But got: \(validToken as Any). Please check sytax")
         }
         consume()
         if validToken?.type == .rightCurlyBracket {
             consume()
-            return PBXObjCharacter(members: [])
+            return [:]
         } else {
             let members = try parseMembers()
             guard validToken?.type == .rightCurlyBracket else {
@@ -117,14 +176,14 @@ private extension PBXProjParser {
 //                throw SyntaxError.expected("Expected token: \";\" do not find. But got: \(validToken as Any). Please check sytax")
 //            }
 //            consume()
-            return PBXObjCharacter(members: members)
+            return members
         }
     }
     
-    func parseMembers() throws -> [PBXMemberCharacter] {
-        var members: [PBXMemberCharacter] = []
+    func parseMembers() throws -> [String : PBXValueType] {
+        var members: [String : PBXValueType] = [:]
         let member = try parseMember()
-        members.append(member)
+        members[member.key] = member.value
         guard validToken?.type == .semicolon else {
             throw SyntaxError.expected("Expected token: \";\" do not find. But got: \(validToken as Any). Please check sytax")
         }
@@ -132,19 +191,19 @@ private extension PBXProjParser {
         if validToken?.type == .rightCurlyBracket {
             return members
         }
-        members.append(contentsOf: try parseMembers())
+        members.merge(try parseMembers(), uniquingKeysWith: { current,new in new })
         return members
     }
     
-    func parseMember() throws -> PBXMemberCharacter {
+    func parseMember() throws -> (key: String,value: PBXValueType) {
         guard validToken?.type == .name || validToken?.type == .number || validToken?.type == .doubleQuote else {
             throw SyntaxError.expected("Expected token: \"NameToken\" do not find. But got: \(validToken as Any). Please check sytax")
         }
-        var name: PBXNameCharacter
+        var name: String
         if validToken?.type == .doubleQuote {
-            name = PBXNameCharacter(name: try parseString().string)
+            name = try parseString()
         } else {
-            name = PBXNameCharacter(name: validToken!.text)
+            name = validToken!.text
         }
         consume()
         guard validToken?.type == .equal else {
@@ -152,17 +211,17 @@ private extension PBXProjParser {
         }
         consume()
         let value = try parseValue()
-        return PBXMemberCharacter(name: name, value: value)
+        return (name,value)
     }
     
-    func parseValue() throws -> PBXValueCharacter {
+    func parseValue() throws -> PBXValueType {
         if let token = validToken {
             if token.type == .number  {
-                return PBXNumCharacter(num: try parseNums())
+                return try parseNums()
             } else if token.type == .name {
-                return PBXNameCharacter(name: try parseName())
+                return try parseName()
             } else if token.type == .dot {
-                return PBXNameCharacter(name: try parsePath())
+                return try parsePath()
             } else if token.type == .leftCurlyBracket {
                 return try parseObject()
             } else if token.type == .leftParenthesis {
@@ -177,25 +236,25 @@ private extension PBXProjParser {
         }
     }
     
-    func parseArray() throws -> PBXArrayCharacter {
+    func parseArray() throws -> [PBXValueType] {
         guard validToken?.type == .leftParenthesis else {
             throw SyntaxError.expected("Expected token: \"(\" do not find. But got: \(validToken as Any). Please check sytax")
         }
         consume()
         if validToken?.type == .rightParenthesis {
             consume()
-            return PBXArrayCharacter(array: [])
+            return []
         }
         let elements = try parseElements()
         guard validToken?.type == .rightParenthesis else {
             throw SyntaxError.expected("Expected token: \")\" do not find. But got: \(validToken as Any). Please check sytax")
         }
         consume()
-        return PBXArrayCharacter(array: elements)
+        return elements
     }
     
-    func parseElements() throws -> [PBXValueCharacter] {
-        var elements: [PBXValueCharacter] = []
+    func parseElements() throws -> [PBXValueType] {
+        var elements: [PBXValueType] = []
         let value = try parseValue()
         elements.append(value)
         guard validToken?.type == .comma else {
@@ -209,7 +268,7 @@ private extension PBXProjParser {
         return elements
     }
     
-    func parseString() throws -> PBXStringCharacter {
+    func parseString() throws -> String {
         guard validToken?.type == .doubleQuote else {
             throw SyntaxError.expected("Expected token: \" do not find. But got: \(validToken as Any). Please check sytax")
         }
@@ -221,7 +280,7 @@ private extension PBXProjParser {
         }
         if validToken?.type == .doubleQuote {
             consume()
-            return PBXStringCharacter(string: "\"\(str)\"")
+            return "\"\(str)\""
         }
         throw SyntaxError.expected("Expected token: \" do not find to the end. Please check sytax")
     }
@@ -293,5 +352,12 @@ private extension PBXProjParser {
         }
         index = backup
         throw SyntaxError.expected(token.text)
+    }
+}
+
+// MARK: - read
+private extension PBXProjParser {
+    func value<T: PBXValueType>(for key: String, in objects: PBXValueType) -> T? {
+        (objects as? [String: PBXValueType])?[key] as? T
     }
 }

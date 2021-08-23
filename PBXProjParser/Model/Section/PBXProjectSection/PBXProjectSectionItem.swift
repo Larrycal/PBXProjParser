@@ -8,7 +8,7 @@
 import Foundation
 
 struct PBXProjectSectionItem: SectionItem {
-    var isa: PBXFileISAType = .project
+    var isa: PBXFileISAType { .project }
     
     var id: String
     

@@ -11,10 +11,10 @@ struct PBXFileReferenceSectionItem: SectionItem {
     let isa: PBXFileISAType = .fileReference
     var id: String
     var fileEncoding: Int?
-    var lastKnownFileType: String
+    var lastKnownFileType: String?
     var name: String?
     var path: String
     var sourceTree: String
-    var explicitFileType: String
+    var explicitFileType: String?
     var includeInIndex: Int?
 }

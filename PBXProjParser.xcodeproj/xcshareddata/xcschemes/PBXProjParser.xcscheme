@@ -52,7 +52,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-f /Users/larry/Documents/Practice/PBXProjParser/PBXProjParser/Tests/project.pbxproj"
+            argument = "-f /Users/larry/Documents/Practice/PBXProjParser/PBXProjParser/Tests/project.pbxproj -s FHErrorHubManagerUtil.h"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
