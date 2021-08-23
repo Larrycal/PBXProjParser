@@ -9,7 +9,8 @@
 - [x] PBXProject section
 
 # Usage:
-./PBXProjParser -f /path/to/project.pbxproj -s filename
+
+`./PBXProjParser -f /path/to/project.pbxproj -s filename`
 
 ```shell
 /path/to/project.pbxproj
