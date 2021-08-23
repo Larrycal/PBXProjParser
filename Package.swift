@@ -4,12 +4,16 @@
 import PackageDescription
 
 let package = Package(
-    name: "PBXProjParser",
+    name: "PBXProjParserKit",
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "PBXProjParserKit",
+            type: .dynamic,
             targets: ["PBXProjParserKit"]),
+        .executable(
+            name: "PBXProjParser",
+            targets: ["PBXProjParser"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -25,8 +29,5 @@ let package = Package(
         .target(
             name: "PBXProjParser",
             dependencies: ["PBXProjParserKit"]),
-        .testTarget(
-            name: "PBXProjParserTests",
-            dependencies: ["PBXProjParser"]),
     ]
 )
