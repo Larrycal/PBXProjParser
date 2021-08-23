@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct PBXFileReferenceSectionItem: SectionItem {
-    let isa: PBXFileISAType = .fileReference
-    var id: String
-    var fileEncoding: Int?
-    var lastKnownFileType: String?
-    var name: String?
-    var path: String
-    var sourceTree: String
-    var explicitFileType: String?
-    var includeInIndex: Int?
+public struct PBXFileReferenceSectionItem: SectionItem {
+    public let isa: PBXFileISAType = .fileReference
+    public var id: String
+    public var fileEncoding: Int?
+    public var lastKnownFileType: String?
+    public var name: String?
+    public var path: String
+    public var sourceTree: String
+    public var explicitFileType: String?
+    public var includeInIndex: Int?
 }

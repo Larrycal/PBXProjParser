@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct PBXGroupSectionItem: SectionItem {
-    let isa: PBXFileISAType = .group
-    var id: String
-    var children: [String]
-    var path: String?
-    var name: String?
-    var sourceTree: String
+public struct PBXGroupSectionItem: SectionItem {
+    public let isa: PBXFileISAType = .group
+    public var id: String
+    public var children: [String]
+    public var path: String?
+    public var name: String?
+    public var sourceTree: String
 }

@@ -7,8 +7,7 @@
 
 import Foundation
 import CommandLineKit
-
-let THEMIS_VERSION = "1.0"
+import PBXProjParserKit
 
 // 命令行参数解析
 let filePath = StringOption(shortFlag: "f", longFlag: "file", required: true, helpMessage: "The file or directory to be parsed")

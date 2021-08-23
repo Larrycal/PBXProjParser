@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct PBXProjectSectionItem: SectionItem {
-    var isa: PBXFileISAType { .project }
+public struct PBXProjectSectionItem: SectionItem {
+    public var isa: PBXFileISAType { .project }
     
-    var id: String
+    public var id: String
     
     
 }

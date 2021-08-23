@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum PBXFileISAType {
+public enum PBXFileISAType {
     case build
     case fileReference
     case group

@@ -7,10 +7,10 @@
 
 import Foundation
 
-class PBXProjParser {
-    var path: String = ""
-    
-    func run() throws -> PBXProjNode {
+public class PBXProjParser {
+    public var path: String = ""
+    public init() { }
+    public func run() throws -> PBXProjNode {
         reset()
         let content = try String(contentsOfFile: path)
         tokens = PBXLexer(content).allTokens

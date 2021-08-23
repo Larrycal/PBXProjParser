@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol SectionItem {
+public protocol SectionItem {
     var isa: PBXFileISAType { get }
     var id: String { get set }
 }

@@ -7,17 +7,17 @@
 
 import Foundation
 
-struct PBXProjNode: Node {
-    var archiveVersion: String
+public struct PBXProjNode: Node {
+    public var archiveVersion: String
     
-    var objectVersion: String
+    public var objectVersion: String
     
-    var objects: [Section]
+    public var objects: [Section]
     
-    var rootObject: PBXProjectSectionItem
+    public var rootObject: PBXProjectSectionItem
 }
 
-extension Array where Element == Section {
+public extension Array where Element == Section {
     var pbxFileReferenceSecion:[PBXFileReferenceSectionItem] {
         let rs:[PBXFileReferenceSectionItem] = []
         return filter({$0.type == .fileReference}).reduce(into: rs) { rs, section in

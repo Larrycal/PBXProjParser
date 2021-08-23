@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum SectionType {
+public enum SectionType {
     /// PBXGroupSectionItem
     case group
     /// PBXBuildFileSectionItem
@@ -18,7 +18,7 @@ enum SectionType {
     case project
 }
 
-struct Section {
+public struct Section {
     var type: SectionType
     var items: [SectionItem]
 }
