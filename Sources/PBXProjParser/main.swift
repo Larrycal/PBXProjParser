@@ -41,14 +41,14 @@ let parser = PBXProjParser()
 print(paths)
 parser.path = paths
 let node = try parser.run()
-guard let fileRef = node.objects.pbxFileReferenceSecion.first(where:{$0.path == toSearch}) else {
+guard let fileRef = node.objects.pbxFileReferenceSection.first(where:{$0.path == toSearch}) else {
     print("Do not find fileRef of :\(toSearch)")
     exit(RETURN)
 }
 print("\(toSearch) has been found. Searching...")
-var path = toSearch
+var path = "/" + toSearch
 var key = fileRef.id
-while let group = node.objects.pbxGroupSecion.first(where: {$0.children.contains(where: {$0 == key})}), group.path?.isEmpty == false {
+while let group = node.objects.pbxGroupSection.first(where: {$0.children.contains(where: {$0 == key})}), group.path?.isEmpty == false {
     if group.path!.first != "." && group.path!.first != "/" {
         path = "/\(group.path!)\(path)"
     } else {

@@ -111,6 +111,9 @@ extension PBXLexer {
             case "+":
                 consume()
                 return PBXToken(type: .plus, text: "+")
+            case "@":
+                consume()
+                return PBXToken(type: .at, text: "@")
             default:
                 if isLetter(currentChar) || currentChar == "_" {
                     let value = name()
@@ -213,7 +216,7 @@ private extension PBXLexer {
         
         while !fileEnd {
             c = currentChar
-            if isLetter(c) || isNumber(c) || c == "_" || c == "+" || c == "-" {
+            if isLetter(c) || isNumber(c) || c == "_" || c == "+" || c == "-" || c == "." {
                 name.append(c)
                 consume()
             } else {

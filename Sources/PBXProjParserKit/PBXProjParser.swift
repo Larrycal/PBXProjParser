@@ -165,10 +165,6 @@ private extension PBXProjParser {
                 throw SyntaxError.expected("Expected token: \"}\" do not find. But got: \(validToken as Any). Please check sytax")
             }
             consume()
-//            guard validToken?.type == .semicolon else {
-//                throw SyntaxError.expected("Expected token: \";\" do not find. But got: \(validToken as Any). Please check sytax")
-//            }
-//            consume()
             return members
         }
     }

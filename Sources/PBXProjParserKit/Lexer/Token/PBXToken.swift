@@ -70,6 +70,8 @@ enum PBXTokenType {
     case space
     /// 反斜线: \
     case backslash
+    /// 艾特: @
+    case at
 //    /// 源码类型: .m .swift
 //    case sourceFile
 //    /// 头文件: .h
