@@ -114,12 +114,21 @@ extension PBXLexer {
             case "@":
                 consume()
                 return PBXToken(type: .at, text: "@")
+            case "~":
+                consume()
+                return PBXToken(type: .wave, text: "~")
+            case ":":
+                consume()
+                return PBXToken(type: .colon, text: ":")
             default:
                 if isLetter(currentChar) || currentChar == "_" {
                     let value = name()
                     return PBXToken(type: .name, text: value)
                 } else if isNumber(currentChar) {
                     let value = number()
+                    if isLetter(currentChar) {
+                        return PBXToken(type: .name, text: value + name())
+                    }
                     return PBXToken(type: .number, text: value)
                 }
                 print("无法识别的字符: \(currentChar)")
@@ -216,6 +225,7 @@ private extension PBXLexer {
         
         while !fileEnd {
             c = currentChar
+            // 变量中允许存在_,+，-,.等特殊符号
             if isLetter(c) || isNumber(c) || c == "_" || c == "+" || c == "-" || c == "." {
                 name.append(c)
                 consume()

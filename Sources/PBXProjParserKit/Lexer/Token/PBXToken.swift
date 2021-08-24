@@ -12,7 +12,7 @@ enum PBXTokenType {
     case unknown
     /// 文件结束
     case endOfFile
-    /// 反斜线: /
+    /// 斜线: /
     case slash
     /// 星号: *
     case asterisk
@@ -72,6 +72,8 @@ enum PBXTokenType {
     case backslash
     /// 艾特: @
     case at
+    /// 波浪线: ~
+    case wave
 //    /// 源码类型: .m .swift
 //    case sourceFile
 //    /// 头文件: .h

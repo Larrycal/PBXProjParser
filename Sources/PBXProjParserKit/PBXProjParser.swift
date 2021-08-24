@@ -174,7 +174,7 @@ private extension PBXProjParser {
         let member = try parseMember()
         members[member.key] = member.value
         guard validToken?.type == .semicolon else {
-            throw SyntaxError.expected("Expected token: \";\" do not find. But got: \(validToken as Any). Please check sytax")
+            throw SyntaxError.expected("Parse members error: Expected token: \";\" do not find. But got: \(validToken as Any). Please check sytax")
         }
         consume()
         if validToken?.type == .rightCurlyBracket {
@@ -188,17 +188,38 @@ private extension PBXProjParser {
         guard validToken?.type == .name || validToken?.type == .number || validToken?.type == .doubleQuote else {
             throw SyntaxError.expected("Expected token: \"NameToken\" do not find. But got: \(validToken as Any). Please check sytax")
         }
+        
         var name: String
-        if validToken?.type == .doubleQuote {
+        if validToken?.type == .name { // name or domin
+            if peekForValidToken(after: 1)?.type == .dot {
+                name = try parseDomin()
+            } else if peekForValidToken(after: 1)?.type == .slash {
+                name = try parseSystemPath()
+            } else {
+                name = try parseName()
+            }
+        } else if validToken?.type == .number {
+            name = validToken!.text
+            consume()
+        } else if validToken?.type == .dot { // currentPath or parentPath
+            if peekForValidToken(after: 1)?.type == .dot {
+                name = try parseParentPath()
+            } else {
+                name = try parseCurrentPath()
+            }
+        } else if validToken?.type == .slash { // rootPath
+            name = try parseRootPath()
+        } else if validToken?.type == .doubleQuote {
             name = try parseString()
         } else {
-            name = validToken!.text
+            throw SyntaxError.expected("Expected token: \"NameToken\" do not find. But got: \(validToken as Any). Please check sytax")
         }
-        consume()
+        
         guard validToken?.type == .equal else {
             throw SyntaxError.expected("Expected token: \"EqualToken\" do not find. But got: \(validToken as Any). Please check sytax")
         }
         consume()
+        
         let value = try parseValue()
         return (name,value)
     }
@@ -208,8 +229,14 @@ private extension PBXProjParser {
             if token.type == .number  {
                 return try parseNums()
             } else if token.type == .name {
-                return try parseName()
-            } else if token.type == .dot {
+                if peekForValidToken(after: 1)?.type == .dot {
+                    return try parseDomin()
+                } else if peekForValidToken(after: 1)?.type == .slash {
+                    return try parseSystemPath()
+                } else {
+                    return try parseName()
+                }
+            } else if token.type == .dot || token.type == .slash {
                 return try parsePath()
             } else if token.type == .leftCurlyBracket {
                 return try parseObject()
@@ -263,20 +290,20 @@ private extension PBXProjParser {
         }
         consume()
         var str = ""
-        while let token = validToken, token.type != .doubleQuote {
+        while let token = currentToken, token.type != .doubleQuote {
             str += "\(token.text)"
             consume()
         }
-        if validToken?.type == .doubleQuote {
+        if currentToken?.type == .doubleQuote {
             consume()
-            return "\"\(str)\""
+            return "\(str)"
         }
         throw SyntaxError.expected("Expected token: \" do not find to the end. Please check sytax")
     }
     
     func parseName() throws -> String {
         guard validToken?.type == .name else {
-            throw SyntaxError.expected("Expected token: \"NameToken\" do not find. But got: \(validToken as Any). Please check sytax")
+            throw SyntaxError.expected("Parse name error: Expected token: \"NameToken\" do not find. But got: \(validToken as Any). Please check sytax")
         }
         var str = validToken!.text
         consume()
@@ -306,41 +333,144 @@ private extension PBXProjParser {
     }
     
     func parsePath() throws -> String {
-        guard validToken?.type == .dot else {
-            throw SyntaxError.expected("Expected token: \".\" do not find. But got: \(validToken as Any). Please check sytax")
-        }
-        var str = validToken!.text
-        consume()
         if validToken?.type == .dot {
-            str += validToken!.text
-            consume()
-            if validToken?.type == .slash {
-                str += validToken!.text
-                consume()
+            if peekForValidToken(after: 1)?.type == .dot {
+                return try parseParentPath()
             } else {
-                throw SyntaxError.expected("Expected token: \".\" or \" /\" do not find. But got: \(validToken as Any). Please check sytax")
+                return try parseCurrentPath()
             }
         } else if validToken?.type == .slash {
-            if validToken?.type == .slash {
-                str += validToken!.text
-                consume()
-            }
+            return try parseRootPath()
+        } else if validToken?.type == .name {
+            return try parseSystemPath()
         } else {
-            throw SyntaxError.expected("Expected token: \".\" or \" /\" do not find. But got: \(validToken as Any). Please check sytax")
+            throw SyntaxError.expected("Parse path error: token: \".\" or \"slash\" or \"NameToken\" do not find. But got: \(validToken as Any). Please check sytax")
         }
-        
-        return try str + parseName()
     }
     
-    func peekFor(_ token: PBXToken) throws -> Int {
+    func parseCurrentPath() throws -> String {
+        guard validToken?.type == .dot, peekForValidToken(after: 1)?.type == .slash else {
+            throw SyntaxError.expected("Parse current path error: Expected token: \" . \" and \" / \" do not find. But got: \(validToken as Any). Please check sytax")
+        }
+        let path = validToken!.text
+        consume()
+        return try path + parseRootPath()
+        
+    }
+    
+    func parseRootPath() throws -> String {
+        guard validToken?.type == .slash else {
+            throw SyntaxError.expected("Parse root path error: Expected token: \" / \" do not find. But got: \(validToken as Any). Please check sytax")
+        }
+        var path = validToken!.text
+        consume()
+        if validToken?.type == .name {
+            path += validToken!.text
+            consume()
+        } else {
+            return path
+        }
+        if validToken?.type == .slash {
+            return try path + parseRootPath()
+        } else {
+            return path
+        }
+    }
+    
+    func parseParentPath() throws -> String {
+        guard validToken?.type == .dot, peekForValidToken(after: 1)?.type == .dot else {
+            throw SyntaxError.expected("Parse parent path error: Expected token: \" . \" and \" . \" do not find. But got: \(validToken as Any). Please check sytax")
+        }
+        var path = validToken!.text
+        consume()
+        path += validToken!.text
+        consume()
+        if validToken?.type == .slash {
+            return try path + parseRootPath()
+        } else {
+            return path
+        }
+    }
+    
+    func parseSystemPath() throws -> String {
+        guard validToken?.type == .name, peekForValidToken(after: 1)?.type == .slash else {
+            throw SyntaxError.expected("Parse system path error: Expected token: \"name token\" and \" / \" do not find. But got: \(validToken as Any). Please check sytax")
+        }
+        var path = validToken!.text
+        consume()
+        path += validToken!.text
+        consume()
+        if validToken?.type == .name {
+            return try path + parseSystemPath()
+        } else {
+            return path
+        }
+    }
+    
+    func parseDomin() throws -> String {
+        guard peekForValidToken(after: 2)?.type == .name else {
+            throw SyntaxError.expected("Parse domin Error: Expected token: \".\" or \" /\" do not find. But got: \(validToken as Any). Please check sytax")
+        }
+        var domin = validToken!.text
+        consume()
+        domin += validToken!.text
+        consume()
+        domin += validToken!.text
+        if validToken?.type == .dot {
+            return try domin + parseDomin1()
+        } else {
+            return domin
+        }
+    }
+    
+    func parseDomin1() throws -> String {
+        var domin = validToken!.text
+        consume()
+        if validToken?.type == .name {
+            domin += validToken!.text
+            consume()
+        } else {
+            throw SyntaxError.expected("Parse domin1 Error: Expected token: \".\" or \" /\" do not find. But got: \(validToken as Any). Please check sytax")
+        }
+        if validToken?.type == .dot {
+            return try domin + parseDomin1()
+        } else {
+            return domin
+        }
+    }
+    
+    // 查看从当前index开始数的第index个有效token,i ∈ [1,tokens.count)
+    func peekForValidToken(after i: Int) -> PBXToken? {
         let backup = index
-        while let current = validToken {
-            if token == current {
-                return index
-            }
+        var i = i
+        var token: PBXToken?
+        while i > 0 {
+            token = validToken
+            i -= 1
         }
         index = backup
-        throw SyntaxError.expected(token.text)
+        return token
+    }
+    
+    @discardableResult
+    func makeTokenValid() -> Bool {
+        if currentToken == nil { return false }
+        let invalidTokens:[PBXTokenType] = [.return,.space,.leftAnnotation,.annotation]
+        if !invalidTokens.contains(currentToken!.type) { return true }
+        var annotationMode = false
+        while index < tokens.endIndex, tokens[index].type == .return || tokens[index].type == .space || tokens[index].type == .leftAnnotation || tokens[index].type == .annotation || annotationMode {
+            if tokens[index].type == .leftAnnotation || tokens[index].type == .annotation {
+                annotationMode = true
+            }
+            if annotationMode && (tokens[index].type == .rightAnnotation || tokens[index].type == .return) {
+                annotationMode = false
+            }
+            index = tokens.index(after: index)
+        }
+        if index < tokens.endIndex {
+            return true
+        }
+        return false
     }
 }
 
